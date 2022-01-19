@@ -5,12 +5,15 @@ import {
   mint,
   claimRewards,
   getAvaxBalance,
+  contractData,
 } from "./components/blockchainFunctions";
 
 function App() {
   const [userAddress, setUserAddress] = useState("");
   const [userBalance, setUserBalance] = useState("");
   const [userTokens, setUserTokens] = useState([]);
+  const [rewards, setRewards] = useState("");
+  const [supply, setSupply] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const connectWallet = async () => {
@@ -64,9 +67,18 @@ function App() {
     }
   };
 
+  const getContractData = async () => {
+    let result = await contractData();
+    if (result) {
+      setSupply(result.supply);
+      console.log(result, "rewards");
+    }
+  };
+
   const getUserData = () => {
     getUserNFTs();
     getUserBalance();
+    getContractData();
   };
 
   useEffect(() => {
@@ -75,34 +87,42 @@ function App() {
 
   return (
     <div className="App">
-      mint text
       {userAddress ? (
         <div className="mint-block">
           <h3>{userAddress}</h3>
           <h3>Balance: {userBalance} AVAX</h3>
+          {/* <h4>Total Rewards Distributed: {rewards} AVAX</h4> */}
+          <h4>Total Minted: {supply} NFTs</h4>
           <button disabled={isLoading} onClick={handleMint}>
             Mint
           </button>
 
           <div className="nft-block">
-            {userTokens.map((el, index) => {
-              return (
-                <div key={index} className="nft-card">
-                  <h3>Token Id: {el.tokenId.toString()}</h3>
-                  <h4>Tier: {el.tier.toString()}</h4>
-                  <h4>
-                    Pending Rewards: {Number(el.rewards / 10 ** 18).toFixed(4)}{" "}
-                    AVAX
-                  </h4>
-                  <button
-                    disabled={isLoading}
-                    onClick={() => handleClaim(el.tokenId)}
-                  >
-                    Claim Rewards
-                  </button>
-                </div>
-              );
-            })}
+            {userTokens.length != 0 ? (
+              <>
+                <h3>Your NFTs</h3>
+                {userTokens.map((el, index) => {
+                  return (
+                    <div key={index} className="nft-card">
+                      <h4>Token Id: {el.tokenId.toString()}</h4>
+                      <h5>Tier: {el.tier.toString()}</h5>
+                      <h5>
+                        Pending Rewards:{" "}
+                        {Number(el.rewards / 10 ** 18).toFixed(4)} AVAX
+                      </h5>
+                      <button
+                        disabled={isLoading}
+                        onClick={() => handleClaim(el.tokenId)}
+                      >
+                        Claim Rewards
+                      </button>
+                    </div>
+                  );
+                })}
+              </>
+            ) : (
+              <h3>You don't have any NFT, mint one for 1.5 AVAX</h3>
+            )}
           </div>
         </div>
       ) : (

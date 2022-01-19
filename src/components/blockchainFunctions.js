@@ -72,3 +72,15 @@ export const getAvaxBalance = async (address) => {
     console.log(error, "getAvaxBalance");
   }
 };
+
+export const contractData = async () => {
+  try {
+    let supply = await NFTContract.totalSupply();
+
+    return {
+      supply: Number(supply),
+    };
+  } catch (error) {
+    console.log(error, "totalRewards");
+  }
+};

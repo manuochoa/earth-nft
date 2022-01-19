@@ -30,6 +30,19 @@ export const abi = [
     type: "event",
   },
   {
+    inputs: [],
+    name: "totalRewards",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     anonymous: false,
     inputs: [
       {

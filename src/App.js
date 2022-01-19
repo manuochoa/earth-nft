@@ -70,6 +70,7 @@ function App() {
   const getContractData = async () => {
     let result = await contractData();
     if (result) {
+      setRewards(result.totalRewards);
       setSupply(result.supply);
       console.log(result, "rewards");
     }
@@ -91,7 +92,7 @@ function App() {
         <div className="mint-block">
           <h3>{userAddress}</h3>
           <h3>Balance: {userBalance} AVAX</h3>
-          {/* <h4>Total Rewards Distributed: {rewards} AVAX</h4> */}
+          <h4>Total Rewards Distributed: {rewards} AVAX</h4>
           <h4>Total Minted: {supply} NFTs</h4>
           <button disabled={isLoading} onClick={handleMint}>
             Mint

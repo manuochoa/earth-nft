@@ -6,7 +6,7 @@ const NODE_URL = "https://api.avax-test.network/ext/bc/C/rpc";
 let provider = new ethers.providers.JsonRpcProvider(NODE_URL);
 // let signer = provider.getSigner(0);
 
-let NFTAddress = "0x088D2100BE9EFca9Dd4a05B7765dceE668a16a1e";
+let NFTAddress = "0xd41Af173570F579b420A0768d18F18FBFeb1d126";
 
 let NFTContract = new ethers.Contract(NFTAddress, abi, provider);
 
@@ -76,9 +76,11 @@ export const getAvaxBalance = async (address) => {
 export const contractData = async () => {
   try {
     let supply = await NFTContract.totalSupply();
+    let totalRewards = await NFTContract.totalRewards();
 
     return {
       supply: Number(supply),
+      totalRewards: ethers.utils.formatEther(totalRewards),
     };
   } catch (error) {
     console.log(error, "totalRewards");
